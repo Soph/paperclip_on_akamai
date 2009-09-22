@@ -1,0 +1,21 @@
+production:
+  enabled: true
+  scp_host: example.upload.akamai.com
+  scp_user: sshuser
+  key: config/akamai_id_dsa
+  remote_path: example_path
+  web_host: http://cdn.example.com
+  delayed_job: true
+  
+development:
+  enabled: true
+  scp_host: example.upload.akamai.com
+  scp_user: sshuser
+  key: config/akamai_id_dsa
+  remote_path: example_path
+  web_host: http://cdn.example.com
+  delayed_job: true
+  
+test:
+  enabled: false
+

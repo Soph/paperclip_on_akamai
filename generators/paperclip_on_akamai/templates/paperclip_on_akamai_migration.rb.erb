@@ -1,0 +1,13 @@
+class <%= migration_name %> < ActiveRecord::Migration
+  def self.up
+<% attachments.each do |attachment| -%>
+    add_column :<%= class_name.underscore.camelize.tableize %>, :<%= attachment %>_on_akamai, :boolean
+<% end -%>
+  end
+
+  def self.down
+<% attachments.each do |attachment| -%>
+    remove_column :<%= class_name.underscore.camelize.tableize %>, :<%= attachment %>_on_akamai
+<% end -%>
+  end
+end

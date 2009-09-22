@@ -1,0 +1,33 @@
+PaperclipOnAkamai
+=================
+
+A simple addition to Paperclip. I doesn't uses Akamai as only Storage but rather saves all files local and pushs copies to Akamai. Best way to use is with delayed_job since Uploading to Akamai via SCP takes some time.
+
+Basic Usage
+===========
+
+  1. ruby script/generate paperclip_on_akamai Class <attachment>
+  
+  2. run rake db:migrate
+  
+  3. change "has_attached_file" to "has_attached_file_on_akamai"
+  
+  4. copy example_akamai.yml to RAILS_ROOT/config/akamai.yml and edit all values (delayed_job is recommended)
+    
+Example
+=======
+
+  Console: 
+  
+  ruby script/generate paperclip_on_akamai Teaser image
+  
+  
+  Teaser.rb: 
+  
+  has_attached_file_on_akamai :image,
+    :path   => ':rails_root/public/assets/teasers/:id_partition/:style/:basename.:extension',
+    :url    => '/assets/teasers/:id_partition/:style/:basename.:extension',
+    :styles => { :main_full  => ['566x318#'] }
+    
+    
+Copyright (c) 2009 Stefan Haubold, released under the MIT license
