@@ -3,6 +3,14 @@ PaperclipOnAkamai
 
 A simple addition to Paperclip. I doesn't uses Akamai as only Storage but rather saves all files local and pushs copies to Akamai. Best way to use is with delayed_job since Uploading to Akamai via SCP takes some time.
 
+The Plugin adds a 8 digit random hex string to all filenames. This helps with Akamai Caching, every new version of the same file (if it has the same filename at all) gets a new filename on akamai, every old version is deleted. Between modifying the attachment and uploading to akamai, local urls are generated for that attachment.
+
+Installation
+============
+
+  ruby script/plugin install git://github.com/Soph/paperclip_on_akamai.git
+
+
 Basic Usage
 ===========
 
@@ -29,5 +37,10 @@ Example
     :url    => '/assets/teasers/:id_partition/:style/:basename.:extension',
     :styles => { :main_full  => ['566x318#'] }
     
+TODO / Known Problems
+=====================
+
+* after_destroy hook for removing unneeded files from akamai
+
     
 Copyright (c) 2009 Stefan Haubold, released under the MIT license
