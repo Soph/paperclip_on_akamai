@@ -73,6 +73,8 @@ module PaperclipOnAkamai
 
       # Call Default Paperclip Setup
       has_attached_file name.to_sym, options
+      
+      attr_accessor :_do_akamai_upload
 
       define_method "upload_#{name}_to_akamai" do
         upload_to_akamai(name)

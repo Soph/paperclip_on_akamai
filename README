@@ -41,6 +41,6 @@ TODO / Known Problems
 =====================
 
 * after_destroy hook for removing unneeded files from akamai
-
+* specs 
     
 Copyright (c) 2009 Stefan Haubold, released under the MIT license
