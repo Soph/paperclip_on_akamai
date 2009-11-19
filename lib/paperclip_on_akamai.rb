@@ -69,8 +69,13 @@ module PaperclipOnAkamai
 
       # Add Custom Akamai Url
       url = options[:url] || Paperclip::Attachment.default_options[:url]
-      options[:url] = lambda { |a| a.instance.akamai_asset_url(url, name) }
 
+      proc = lambda { |a| a.instance.akamai_asset_url(url, name) }
+      # Hack for Paperclip Interpolation, validation
+      def proc.include?(item); false; end      
+      options[:url] = proc
+
+      
       # Call Default Paperclip Setup
       has_attached_file name.to_sym, options
       
@@ -93,7 +98,7 @@ module PaperclipOnAkamai
       end
       
       define_method "randomize_#{name}_file_name" do 
-        randomize_asset_file_name(name)
+        randomize_poaasset_file_name(name)
       end
       
       define_method "enable_#{name}_upload_to_akamai" do
@@ -135,9 +140,9 @@ module PaperclipOnAkamai
     end
     
     def enable_upload_to_akamai(paperclip_attachment)
-        self.send("do_akamai_upload_for_#{paperclip_attachment}=",true) # at this time the model hasn't an id, so say after_save callback we need to upload
-        self.send("#{paperclip_attachment}_on_akamai=",false) # since something has changed, don't use akamai version until its properly updated
-     end
+      self.send("do_akamai_upload_for_#{paperclip_attachment}=",true) # at this time the model hasn't an id, so say after_save callback we need to upload
+      self.send("#{paperclip_attachment}_on_akamai=",false) # since something has changed, don't use akamai version until its properly updated
+    end
     
     def upload_to_akamai(paperclip_attachment)
       begin
@@ -160,6 +165,7 @@ module PaperclipOnAkamai
         self.send("#{paperclip_attachment}_on_akamai=",true)
         self.save
       rescue Exception => e
+        puts e.inspect
         self.send("#{paperclip_attachment}_on_akamai=",false)
       end
     end
@@ -172,7 +178,7 @@ module PaperclipOnAkamai
       end
     end
 
-    def randomize_asset_file_name(paperclip_attachment) 
+    def randomize_poaasset_file_name(paperclip_attachment) 
       extension = File.extname(self.send("#{paperclip_attachment}_file_name")) 
       filename = File.basename(self.send("#{paperclip_attachment}_file_name"), extension)
       self.send(paperclip_attachment).instance_write(:file_name, "#{filename}_#{ActiveSupport::SecureRandom.hex.first(8)}#{extension}") 
